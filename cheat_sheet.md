@@ -505,6 +505,8 @@ git config user.name "user_name"
 
 git config user.email "email"
 
+git remote add origin https://github.com/username/project.git
+
 # Make a copy of a git (target can be specified either locally or remotely, via any number of protocols):
 git clone target
 
