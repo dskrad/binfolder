@@ -115,6 +115,21 @@ apt-cache show package_name
 # Download and install a package:
 sudo apt-get install package_name
 
+# Uninstall package:
+sudo apt-get remove package_name
+
+# Uninstall and remove configs:
+sudo apt-get purge package_name
+
+# Remove unneeded dependencies
+sudo apt-get autoclean
+
+# Remove cached files
+sudo apt-get clean
+
+# How big is the apt cache?
+du -sh /var/cache/apt/archives
+
 # View the output of a command in a more convenient format:
 command | less
 
@@ -444,6 +459,9 @@ modprobe
 # View Installed packages:
 dpkg --get-selections
 
+# View binaries for installed package:
+dpkg -L pkg | grep /usr/bin
+
 # Print environment variables:
 printenv 
 
@@ -541,6 +559,21 @@ git merge [branchname] [branchname]
 
 # Show all branches of a project:
 git branch
+
+# Remove the specified file from the staging area, but leave the working directory unchanged. This unstages a file without overwriting any changes.
+git reset <file>
+
+# Reset the staging area to match the most recent commit, but leave the working directory unchanged. This unstages all files without overwriting any changes, giving you the opportunity to re-build the staged snapshot from scratch.
+git reset
+
+# Reset the staging area and the working directory to match the most recent commit. In addition to unstaging changes, the --hard flag tells Git to overwrite all changes in the working directory, too. Put another way: this obliterates all uncommitted changes, so make sure you really want to throw away your local developments before using it.
+git reset --hard
+
+# Move the current branch tip backward to <commit>, reset the staging area to match, but leave the working directory alone. All changes made since <commit> will reside in the working directory, which lets you re-commit the project history using cleaner, more atomic snapshots.
+git reset <commit>
+
+# Move the current branch tip backward to <commit> and reset both the staging area and the working directory to match. This obliterates not only the uncommitted changes, but all commits after <commit>, as well.
+git reset --hard <commit>
 
 *** Virtualization:
 
