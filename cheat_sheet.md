@@ -115,6 +115,21 @@ apt-cache show package_name
 # Download and install a package:
 sudo apt-get install package_name
 
+# Uninstall package:
+sudo apt-get remove package_name
+
+# Uninstall and remove configs:
+sudo apt-get purge package_name
+
+# Remove unneeded dependencies
+sudo apt-get autoclean
+
+# Remove cached files
+sudo apt-get clean
+
+# How big is the apt cache?
+du -sh /var/cache/apt/archives
+
 # View the output of a command in a more convenient format:
 command | less
 
@@ -158,12 +173,19 @@ command &
 # Start a process in the background and have it keep running after you log off
 nohup command &
 
+# View background processes
+jobs
+
+# Use ctrl-z to suspend a process, then issue "bg" to send to background
+# To bring a job to foreground again:
+fg OR %1 OR %2 
+
 **** Compression and Encryption:
 
-# Make a simple compressed backup of files or directories:
+# Make a simple compressed backup of files or directories: (-c create, -v verbose, -z gzip, -f file)
 tar -cvzf backup_output.tgz target_files_or_directories
 
-# Open a compressed .tgz or .tar.gz file:
+# Open a compressed .tgz or .tar.gz file: (-x extract, -v verbose, -f read/write file)
 tar -xvf target.tgz
 
 # Encrypt a file:
@@ -287,6 +309,9 @@ netstat
 # View firewall rules
 iptables -L
 
+# Test outgoing ports (blocked or not) using netcat
+nc -v portquiz.net <port>
+
 # Scan this machine(localhost) to check for open ports:
 nmap localhost
 
@@ -297,6 +322,9 @@ nmap -sP -T Insane 192.168.1-254
 
 # download file with remote name
 curl -O http://example.com/file.txt
+
+# download files with wildcards (retain original names)
+curl -O http://example.com/file[1-33].txt
 
 # download file to named file
 curl -o output.txt http://example.com/file.txt
@@ -327,13 +355,13 @@ wget --ftp-user=USER --ftp-password=PASS ftp://example.com/folder/file
 ***** netcat:
 
 # Listen for input from network on recieving_port, dump it to a file (insecure, but handy):
-netcat -l recieving_port > file_copied
+nc -l recieving_port > file_copied
 
 # Pipe the output of a command to a target ip and port over the network:
-command | netcat -w number_of_seconds_before_timeout target_ip target_port
+command | nc -w number_of_seconds_before_timeout target_ip target_port
 
 # Use tar to compress and output a file as a stream, pipe it to a target ip and port over the network:
-sudo tar -czf - filename | netcat -w number_of_seconds_before_timeout target_ip target_port
+sudo tar -czf - filename | nc -w number_of_seconds_before_timeout target_ip target_port
 
 **** Users and Groups:
 # Change owner of a file or directory:
@@ -444,6 +472,9 @@ modprobe
 # View Installed packages:
 dpkg --get-selections
 
+# View binaries for installed package:
+dpkg -L pkg | grep /usr/bin
+
 # Print environment variables:
 printenv 
 
@@ -519,6 +550,15 @@ git status
 # Show change log for current repository:
 git log
 git log --summary
+git log --oneline
+git log --graph
+git log --after= --before=
+
+# Show actual changes "patch"
+git log -p <commit> <file>
+
+# List tree
+git ls-tree
 
 # Update git directory from another repository:
 git pull [target]
@@ -541,6 +581,24 @@ git merge [branchname] [branchname]
 
 # Show all branches of a project:
 git branch
+
+# Remove the specified file from the staging area, but leave the working directory unchanged. This unstages a file without overwriting any changes.
+git reset <file>
+
+# Reset the staging area to match the most recent commit, but leave the working directory unchanged. This unstages all files without overwriting any changes, giving you the opportunity to re-build the staged snapshot from scratch.
+git reset
+
+# Reset the staging area and the working directory to match the most recent commit. In addition to unstaging changes, the --hard flag tells Git to overwrite all changes in the working directory, too. Put another way: this obliterates all uncommitted changes, so make sure you really want to throw away your local developments before using it.
+git reset --hard
+
+# Checkout a single file (reverts changes to latest commit of that file)
+git checkout -- file.txt
+
+# Move the current branch tip backward to <commit>, reset the staging area to match, but leave the working directory alone. All changes made since <commit> will reside in the working directory, which lets you re-commit the project history using cleaner, more atomic snapshots.
+git reset <commit>
+
+# Move the current branch tip backward to <commit> and reset both the staging area and the working directory to match. This obliterates not only the uncommitted changes, but all commits after <commit>, as well.
+git reset --hard <commit>
 
 *** Virtualization:
 
@@ -609,3 +667,14 @@ mysqldump -u username -p --opt databasename > dumpfile.sql
 
 # restore from entire database dump:
 mysql -u username -p --database=databasename < dumpfile.sql
+
+*** ffmpeg or avconv
+# extract audio from a video file (-vn means "no video")
+ffmpeg -i input.mp4 -acodec copy -vn output.m4a (or mp3 if that is the audio track encoding)
+
+# split aac (m4a) file by timestamp
+ffmpeg -i largefile.m4a -t 00:04:15 -acodec copy smallfile.m4a
+ffmpeg -i largefile.m4a -ss 00:04:15 -acodec copy newlargefile.m4a
+
+# copy h264 video track and audio track to mp4 container
+ffmpeg -i input.flv -vcodec copy -acodec copy output.mp4
