@@ -1,2 +1,6 @@
 # ignore all subdirs
 */
+*.pyc
+*.zip
+*.flv
+*.mp4
