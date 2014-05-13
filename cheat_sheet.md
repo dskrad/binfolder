@@ -531,12 +531,13 @@ pip install -E dirname -r requirements.txt
 
 # Start a new git project:
 git init
-
 git config user.name "user_name"
-
 git config user.email "email"
 
+# Add remote HTTPS method
 git remote add origin https://github.com/username/project.git
+# Add remote SSH method
+git remote add origin git@bitbucket.org:dskrad/bin.git
 
 # Make a copy of a git (target can be specified either locally or remotely, via any number of protocols):
 git clone target
@@ -565,7 +566,11 @@ git pull [target]
 
 # Push branch to other repository:
 git push [target]
-git push -u origin master // -u means remember origin master so next time just use git push
+# Remember origin master so next time just use git push; set upstream
+git push -u origin master 
+
+# Show all branches of a project:
+git branch
 
 # Create a new branch:
 git branch [branchname]
@@ -576,11 +581,12 @@ git checkout [branchname]
 # Delete a branch:
 git branch -d [branchname]
 
+# Delete remote branch
+git push origin :branchname
+git push origin --delete branchname
+
 # Merge two branches:
 git merge [branchname] [branchname]
-
-# Show all branches of a project:
-git branch
 
 # Remove the specified file from the staging area, but leave the working directory unchanged. This unstages a file without overwriting any changes.
 git reset <file>
