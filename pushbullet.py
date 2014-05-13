@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from urllib import urlopen, urlencode
-import sys
-import os
+import sys, os
 key = os.environ['PUSHBULLET_APIKEY']
 device = os.environ['PUSHBULLET_IPHONE']
 url = "https://%s:@api.pushbullet.com/api/pushes" % key
