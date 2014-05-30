@@ -1,31 +1,29 @@
 #!/usr/bin/env python
-from urllib import urlopen, urlencode
+import requests as R
 import sys, os
 key = os.environ['PUSHBULLET_APIKEY']
 device = os.environ['PUSHBULLET_IPHONE']
-push_url = "https://%s:@api.pushbullet.com/api/pushes" % key
+url = "https://api.pushbullet.com/api/pushes"
 
 def note(*args):
   title, body = args[0], ""
   if len(args) == 2:
     body = args[1]
-  params = urlencode({
+  params = {
     #"device_iden": device,
     "type": "note",
     "title": title,
-    "body": body
-    })
-  urlopen(push_url, params)
+    "body": body}
+  R.post(url, params, auth=(key,""))
 
 def link(*args):
   title, url = args
-  params = urlencode({
+  params = {
     #"device_iden": device,
     "type": "link",
     "title": title,
-    "url": url
-    })
-  urlopen(push_url, params)
+    "url": url}
+  R.post(url, params, auth=(key,""))
 
 def main():
   ntype, args = sys.argv[1], sys.argv[2:]
