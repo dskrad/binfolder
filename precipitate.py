@@ -12,7 +12,7 @@ forecast = []
 for i in range(4):
   forecast.append(parsed_json['forecast']['simpleforecast']['forecastday'][i])
 
-print "Snowfall forecast for %s," % (location)
+print "Snowfall forecast for {},".format(location)
 print date
 for i in range(4):
-  print "%s:  \t%s inches" % (forecast[i]['date']['weekday'], forecast[i]['snow_allday']['in'])
+  print "{}:  \t{} inches".format(forecast[i]['date']['weekday'], forecast[i]['snow_allday']['in'])
